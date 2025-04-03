@@ -1,7 +1,7 @@
 package rental
 
 import (
-	"app/film"
+	"app/modules/film"
 )
 
 const (

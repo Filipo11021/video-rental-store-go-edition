@@ -10,7 +10,7 @@ import (
 func Module() fx.Option {
 	return fx.Options(
 		fx.Provide(newGormFilmRepo),
-		fx.Provide(newFacade),
+		fx.Provide(newApi),
 		fx.Invoke(func(db *gorm.DB) {
 			err := db.AutoMigrate(&film{})
 			if err != nil {

@@ -18,10 +18,10 @@ func (film) TableName() string {
 	return "films"
 }
 
-func (f *film) dto() FilmDTO {
+func (a *film) dto() FilmDTO {
 	return FilmDTO{
-		ID:    f.ID,
-		Title: f.Title,
-		Type:  f.Type,
+		ID:    a.ID,
+		Title: a.Title,
+		Type:  a.Type,
 	}
 }

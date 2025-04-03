@@ -1,16 +1,16 @@
 package film_http
 
 import (
-	"app/film"
+	"app/modules/film"	
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
 )
 
-func handler(app *fiber.App, facade film.Facade) {
+func handler(app *fiber.App, api film.Api) {
 	app.Get("/films", func(c *fiber.Ctx) error {
-		films, err := facade.GetAllFilms()
+		films, err := api.GetAllFilms()
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
@@ -23,7 +23,7 @@ func handler(app *fiber.App, facade film.Facade) {
 		if err != nil {
 			return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 		}
-		film, err := facade.GetFilmById(idInt)
+		film, err := api.GetFilmById(idInt)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
@@ -35,7 +35,7 @@ func handler(app *fiber.App, facade film.Facade) {
 		if err := c.BodyParser(&film); err != nil {
 			return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 		}
-		err := facade.CreateFilm(film)
+		err := api.CreateFilm(film)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}

@@ -20,7 +20,7 @@ func Module(c CreateConfigDTO) fx.Option {
 
 	return fx.Module("user",
 		fx.Provide(
-			newFacade,
+			newApi,
 		),
 		fx.Provide(
 			fx.Private,

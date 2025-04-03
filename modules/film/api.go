@@ -6,31 +6,31 @@ type FilmDTO struct {
 	Type  FilmType `json:"type"`
 }
 
-type Facade interface {
+type Api interface {
 	CreateFilm(filmDTO FilmDTO) error
 	GetAllFilms() ([]FilmDTO, error)
 	GetFilmById(id int) (*FilmDTO, error)
 }
 
-type facade struct {
+type api struct {
 	filmRepo filmRepo
 }
 
-func newFacade(filmRepo filmRepo) Facade {
-	return &facade{filmRepo: filmRepo}
+func newApi(filmRepo filmRepo) Api {
+	return &api{filmRepo: filmRepo}
 }
 
-func (f *facade) CreateFilm(filmDTO FilmDTO) error {
+func (a *api) CreateFilm(filmDTO FilmDTO) error {
 	newFilm := &film{
 		Title: filmDTO.Title,
 		Type:  filmDTO.Type,
 	}
 
-	return f.filmRepo.create(newFilm)
+	return a.filmRepo.create(newFilm)
 }
 
-func (f *facade) GetAllFilms() ([]FilmDTO, error) {
-	films, err := f.filmRepo.findAll()
+func (a *api) GetAllFilms() ([]FilmDTO, error) {
+	films, err := a.filmRepo.findAll()
 	if err != nil {
 		return nil, err
 	}
@@ -43,8 +43,8 @@ func (f *facade) GetAllFilms() ([]FilmDTO, error) {
 	return filmsDTO, nil
 }
 
-func (f *facade) GetFilmById(id int) (*FilmDTO, error) {
-	film, err := f.filmRepo.findById(id)
+func (a *api) GetFilmById(id int) (*FilmDTO, error) {
+	film, err := a.filmRepo.findById(id)
 	if err != nil {
 		return nil, err
 	}

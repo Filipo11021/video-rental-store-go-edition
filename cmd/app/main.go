@@ -1,10 +1,11 @@
 package main
 
 import (
-	"app/film"
-	"app/rental"
+	"app/modules/film"
+	"app/modules/rental"
+	"app/modules/user"
 	"app/transport/film_http"
-	"app/user"
+
 	"context"
 	"log"
 	"os"
@@ -19,9 +20,9 @@ import (
 type App struct {
 	fx.In
 
-	RentalFacade rental.Facade
-	FilmFacade   film.Facade
-	UserFacade   user.Facade
+	RentalApi rental.Api
+	FilmApi   film.Api
+	UserApi   user.Api
 }
 
 func provideDatabase() *gorm.DB {
@@ -34,8 +35,7 @@ func provideDatabase() *gorm.DB {
 }
 
 func provideFiberApp() *fiber.App {
-	app := fiber.New(fiber.Config{
-	})
+	app := fiber.New(fiber.Config{})
 	return app
 }
 

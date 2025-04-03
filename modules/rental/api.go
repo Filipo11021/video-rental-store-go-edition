@@ -3,10 +3,10 @@ package rental
 import (
 	"time"
 
-	"app/film"
+	"app/modules/film"
 )
 
-type Facade interface {
+type Api interface {
 	CreateRental(dto CreateRentalDTO) error
 	GetAllRentals() ([]RentalDTO, error)
 	GetRentalById(id int) (*RentalDTO, error)
@@ -16,23 +16,22 @@ type Facade interface {
 	CalculateLateCharge(filmId int, extraDays int) (float64, error)
 }
 
-type facade struct {
+type api struct {
 	rentalRepo      rentalRepo
 	priceCalculator PriceCalculator
-	filmFacade      film.Facade
+	filmApi         film.Api
 }
 
-func newFacade(rentalRepo rentalRepo, priceCalculator PriceCalculator, filmFacade film.Facade) Facade {
+func newApi(rentalRepo rentalRepo, priceCalculator PriceCalculator, filmApi film.Api) Api {
 
-	return &facade{
+	return &api{
 		rentalRepo:      rentalRepo,
 		priceCalculator: priceCalculator,
-		filmFacade:      filmFacade,
-
+		filmApi:         filmApi,
 	}
 }
 
-func (f *facade) CreateRental(dto CreateRentalDTO) error {
+func (a *api) CreateRental(dto CreateRentalDTO) error {
 	startDate := time.Now()
 	endDate := startDate.AddDate(0, 0, dto.Days)
 
@@ -42,11 +41,11 @@ func (f *facade) CreateRental(dto CreateRentalDTO) error {
 		EndDate:   endDate,
 	}
 
-	return f.rentalRepo.create(rental)
+	return a.rentalRepo.create(rental)
 }
 
-func (f *facade) GetAllRentals() ([]RentalDTO, error) {
-	rentals, err := f.rentalRepo.findAll()
+func (a *api) GetAllRentals() ([]RentalDTO, error) {
+	rentals, err := a.rentalRepo.findAll()
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +58,8 @@ func (f *facade) GetAllRentals() ([]RentalDTO, error) {
 	return rentalsDTO, nil
 }
 
-func (f *facade) GetRentalById(id int) (*RentalDTO, error) {
-	rental, err := f.rentalRepo.findById(id)
+func (a *api) GetRentalById(id int) (*RentalDTO, error) {
+	rental, err := a.rentalRepo.findById(id)
 	if err != nil {
 		return nil, err
 	}
@@ -71,8 +70,8 @@ func (f *facade) GetRentalById(id int) (*RentalDTO, error) {
 	return &dto, nil
 }
 
-func (f *facade) ReturnRental(id int) error {
-	rental, err := f.rentalRepo.findById(id)
+func (a *api) ReturnRental(id int) error {
+	rental, err := a.rentalRepo.findById(id)
 	if err != nil {
 		return err
 	}
@@ -81,11 +80,11 @@ func (f *facade) ReturnRental(id int) error {
 	}
 
 	rental.Returned = true
-	return f.rentalRepo.update(rental)
+	return a.rentalRepo.update(rental)
 }
 
-func (f *facade) GetRentalsByFilmId(filmId int) ([]RentalDTO, error) {
-	rentals, err := f.rentalRepo.findByFilmId(filmId)
+func (a *api) GetRentalsByFilmId(filmId int) ([]RentalDTO, error) {
+	rentals, err := a.rentalRepo.findByFilmId(filmId)
 	if err != nil {
 		return nil, err
 	}
@@ -98,18 +97,18 @@ func (f *facade) GetRentalsByFilmId(filmId int) ([]RentalDTO, error) {
 	return rentalsDTO, nil
 }
 
-func (f *facade) CalculatePrice(filmId int, days int) (float64, error) {
-	film, err := f.filmFacade.GetFilmById(filmId)
+func (a *api) CalculatePrice(filmId int, days int) (float64, error) {
+	film, err := a.filmApi.GetFilmById(filmId)
 	if err != nil {
 		return -1, err
 	}
-	return f.priceCalculator.calculatePrice(film.Type, days), nil
+	return a.priceCalculator.calculatePrice(film.Type, days), nil
 }
 
-func (f *facade) CalculateLateCharge(filmId int, extraDays int) (float64, error) {	
-	film, err := f.filmFacade.GetFilmById(filmId)
+func (a *api) CalculateLateCharge(filmId int, extraDays int) (float64, error) {
+	film, err := a.filmApi.GetFilmById(filmId)
 	if err != nil {
 		return -1, err
 	}
-	return f.priceCalculator.calculateLateCharge(film.Type, extraDays), nil
+	return a.priceCalculator.calculateLateCharge(film.Type, extraDays), nil
 }
