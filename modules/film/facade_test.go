@@ -1,6 +1,8 @@
 package film
 
 import (
+	"app/modules/film/film_contracts"
+	"app/modules/film/internal/film_internal"
 	"testing"
 
 	"go.uber.org/fx"
@@ -11,11 +13,11 @@ import (
 func TestFilmApi(t *testing.T) {
 	testApp := fxtest.New(
 		t,
-		fx.Provide(newMemoryFilmRepo),
+		fx.Provide(film_internal.NewMemoryFilmRepo),
 		fx.Provide(newApi),
 		fx.Invoke(func(api Api) {
 			t.Run("Create and Retrieve Single Film", func(t *testing.T) {
-				err := api.CreateFilm(FilmDTO{Title: "Test Movie 1"})
+				err := api.CreateFilm(film_contracts.FilmDTO{Title: "Test Movie 1"})
 				if err != nil {
 					t.Fatalf("Failed to create film: %v", err)
 				}
@@ -47,7 +49,7 @@ func TestFilmApi(t *testing.T) {
 			})
 
 			t.Run("Create Multiple Films", func(t *testing.T) {
-				films := []FilmDTO{
+				films := []film_contracts.FilmDTO{
 					{Title: "Test Movie 2"},
 					{Title: "Test Movie 3"},
 				}

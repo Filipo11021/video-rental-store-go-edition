@@ -1,4 +1,4 @@
-package film
+package film_internal
 
 import (
 	"gorm.io/gorm"
@@ -7,34 +7,34 @@ import (
 // "if errors.Is(err, ErrFilmAlreadyExist)"
 // var ErrFilmAlreadyExist = errors.New("film already exists")
 
-type filmRepo interface {
-	create(film *film) error
-	findAll() ([]*film, error)
-	findById(id int) (*film, error)
+type FilmRepo interface {
+	Create(film *Film) error
+	FindAll() ([]*Film, error)
+	FindById(id int) (*Film, error)
 }
 
 type gormFilmRepo struct {
 	db *gorm.DB
 }
 
-func newGormFilmRepo(db *gorm.DB) filmRepo {
+func NewGormFilmRepo(db *gorm.DB) FilmRepo {
 	return &gormFilmRepo{db: db}
 }
 
-func (r *gormFilmRepo) create(film *film) error {
+func (r *gormFilmRepo) Create(film *Film) error {
 	return r.db.Create(film).Error
 }
 
-func (r *gormFilmRepo) findAll() ([]*film, error) {
-	var films []*film
+func (r *gormFilmRepo) FindAll() ([]*Film, error) {
+	var films []*Film
 	if err := r.db.Find(&films).Error; err != nil {
 		return nil, err
 	}
 	return films, nil
 }
 
-func (r *gormFilmRepo) findById(id int) (*film, error) {
-	var film film
+func (r *gormFilmRepo) FindById(id int) (*Film, error) {
+	var film Film
 	if err := r.db.First(&film, id).Error; err != nil {
 		return nil, err
 	}

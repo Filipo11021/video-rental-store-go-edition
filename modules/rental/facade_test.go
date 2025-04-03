@@ -2,6 +2,7 @@ package rental
 
 import (
 	"app/modules/film"
+	"app/modules/film/film_contracts"
 	"testing"
 	"time"
 
@@ -13,23 +14,23 @@ import (
 
 type mockFilmApi struct{}
 
-func (m *mockFilmApi) CreateFilm(filmDTO film.FilmDTO) error { return nil }
-func (m *mockFilmApi) GetAllFilms() ([]film.FilmDTO, error)  { return nil, nil }
-func (m *mockFilmApi) GetFilmById(id int) (*film.FilmDTO, error) {
-	var filmType film.FilmType
+func (m *mockFilmApi) CreateFilm(filmDTO film_contracts.FilmDTO) error { return nil }
+func (m *mockFilmApi) GetAllFilms() ([]film_contracts.FilmDTO, error)  { return nil, nil }
+func (m *mockFilmApi) GetFilmById(id int) (*film_contracts.FilmDTO, error) {
+	var filmType film_contracts.FilmTypeDto
 
 	switch id {
 	case 1:
-		filmType = film.Regular
+		filmType = film_contracts.Regular
 	case 2:
-		filmType = film.NewRelease
+		filmType = film_contracts.NewRelease
 	case 3:
-		filmType = film.Old
+		filmType = film_contracts.Old
 	default:
-		filmType = film.Regular
+		filmType = film_contracts.Regular
 	}
 
-	return &film.FilmDTO{
+	return &film_contracts.FilmDTO{
 		ID:    id,
 		Title: "Test Film",
 		Type:  filmType,

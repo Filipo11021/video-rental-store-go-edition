@@ -1,6 +1,7 @@
 package film
 
 import (
+	"app/modules/film/internal/film_internal"
 	"fmt"
 
 	"go.uber.org/fx"
@@ -8,11 +9,17 @@ import (
 )
 
 func Module() fx.Option {
-	return fx.Options(
-		fx.Provide(newGormFilmRepo),
-		fx.Provide(newApi),
+	return fx.Module("film",
+		fx.Provide(
+			fx.Private,
+			film_internal.NewGormFilmRepo,
+		),
+		fx.Provide(
+			newApi,
+		),
 		fx.Invoke(func(db *gorm.DB) {
-			err := db.AutoMigrate(&film{})
+			err := db.AutoMigrate(&film_internal.Film{})
+
 			if err != nil {
 				panic(fmt.Sprintf("failed to auto-migrate database: %v", err))
 			}

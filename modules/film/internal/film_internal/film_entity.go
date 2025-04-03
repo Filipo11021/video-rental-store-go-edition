@@ -1,4 +1,6 @@
-package film
+package film_internal
+
+import "app/modules/film/film_contracts"
 
 type FilmType string
 
@@ -8,20 +10,20 @@ const (
 	Old        FilmType = "OLD"
 )
 
-type film struct {
+type Film struct {
 	ID    int      `gorm:"primaryKey"`
 	Title string   `gorm:"column:name"`
 	Type  FilmType `gorm:"column:type"`
 }
 
-func (film) TableName() string {
+func (Film) TableName() string {
 	return "films"
 }
 
-func (a *film) dto() FilmDTO {
-	return FilmDTO{
+func (a *Film) Dto() film_contracts.FilmDTO {
+	return film_contracts.FilmDTO{
 		ID:    a.ID,
 		Title: a.Title,
-		Type:  a.Type,
+		Type:  film_contracts.FilmTypeDto(a.Type),
 	}
 }

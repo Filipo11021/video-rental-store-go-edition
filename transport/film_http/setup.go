@@ -1,7 +1,8 @@
 package film_http
 
 import (
-	"app/modules/film"	
+	"app/modules/film"
+	"app/modules/film/film_contracts"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -31,7 +32,7 @@ func handler(app *fiber.App, api film.Api) {
 	})
 
 	app.Post("/films", func(c *fiber.Ctx) error {
-		var film film.FilmDTO
+		var film film_contracts.FilmDTO
 		if err := c.BodyParser(&film); err != nil {
 			return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 		}
