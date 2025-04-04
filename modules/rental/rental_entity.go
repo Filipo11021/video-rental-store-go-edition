@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type Rental struct {
+type rental struct {
 	ID        int       `gorm:"primaryKey"`
 	FilmID    int       `gorm:"not null"`
 	StartDate time.Time `gorm:"not null"`
@@ -12,11 +12,11 @@ type Rental struct {
 	Returned  bool      `gorm:"default:false"`
 }
 
-func (Rental) TableName() string {
+func (rental) TableName() string {
 	return "rentals"
 }
 
-func (r *Rental) dto() RentalDTO {
+func (r *rental) dto() RentalDTO {
 	return RentalDTO{
 		ID:        r.ID,
 		FilmID:    r.FilmID,
