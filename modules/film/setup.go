@@ -15,7 +15,7 @@ func Module() fx.Option {
 			film_internal.NewGormFilmRepo,
 		),
 		fx.Provide(
-			newApi,
+			film_internal.NewApi,
 		),
 		fx.Invoke(func(db *gorm.DB) {
 			err := db.AutoMigrate(&film_internal.Film{})

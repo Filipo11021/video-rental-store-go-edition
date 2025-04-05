@@ -3,7 +3,7 @@ package rental
 import (
 	"time"
 
-	"app/modules/film"
+	"app/modules/film/film_contracts"
 )
 
 type Api interface {
@@ -19,10 +19,10 @@ type Api interface {
 type api struct {
 	rentalRepo      rentalRepo
 	priceCalculator priceCalculator
-	filmApi         film.Api
+	filmApi         film_contracts.Api
 }
 
-func newApi(rentalRepo rentalRepo, priceCalculator priceCalculator, filmApi film.Api) Api {
+func newApi(rentalRepo rentalRepo, priceCalculator priceCalculator, filmApi film_contracts.Api) Api {
 
 	return &api{
 		rentalRepo:      rentalRepo,

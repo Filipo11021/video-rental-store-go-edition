@@ -1,7 +1,6 @@
 package rental
 
 import (
-	"app/modules/film"
 	"app/modules/film/film_contracts"
 	"testing"
 	"time"
@@ -37,7 +36,7 @@ func (m *mockFilmApi) GetFilmById(id int) (*film_contracts.FilmDTO, error) {
 	}, nil
 }
 
-func newMockFilmApi() film.Api {
+func newMockFilmApi() film_contracts.Api {
 	return &mockFilmApi{}
 }
 

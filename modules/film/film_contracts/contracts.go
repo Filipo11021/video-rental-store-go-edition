@@ -13,3 +13,9 @@ const (
 	Regular    FilmTypeDto = "REGULAR"
 	Old        FilmTypeDto = "OLD"
 )
+
+type Api interface {
+	CreateFilm(filmDTO FilmDTO) error
+	GetAllFilms() ([]FilmDTO, error)
+	GetFilmById(id int) (*FilmDTO, error)
+}

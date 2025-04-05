@@ -1,7 +1,6 @@
 package film_http
 
 import (
-	"app/modules/film"
 	"app/modules/film/film_contracts"
 	"strconv"
 
@@ -9,7 +8,7 @@ import (
 	"go.uber.org/fx"
 )
 
-func handler(app *fiber.App, api film.Api) {
+func handler(app *fiber.App, api film_contracts.Api) {
 	app.Get("/films", func(c *fiber.Ctx) error {
 		films, err := api.GetAllFilms()
 		if err != nil {

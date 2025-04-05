@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/modules/film"
+	"app/modules/film/film_contracts"
 	"app/modules/rental"
 	"app/modules/user"
 	"app/transport/film_http"
@@ -21,7 +22,7 @@ type App struct {
 	fx.In
 
 	RentalApi rental.Api
-	FilmApi   film.Api
+	FilmApi   film_contracts.Api
 	UserApi   user.Api
 }
 

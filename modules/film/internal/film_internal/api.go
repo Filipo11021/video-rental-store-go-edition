@@ -1,28 +1,21 @@
-package film
+package film_internal
 
 import (
 	"app/modules/film/film_contracts"
-	"app/modules/film/internal/film_internal"
 )
 
-type Api interface {
-	CreateFilm(filmDTO film_contracts.FilmDTO) error
-	GetAllFilms() ([]film_contracts.FilmDTO, error)
-	GetFilmById(id int) (*film_contracts.FilmDTO, error)
-}
-
 type api struct {
-	filmRepo film_internal.FilmRepo
+	filmRepo FilmRepo
 }
 
-func newApi(filmRepo film_internal.FilmRepo) Api {
+func NewApi(filmRepo FilmRepo) film_contracts.Api {
 	return &api{filmRepo: filmRepo}
 }
 
 func (a *api) CreateFilm(filmDTO film_contracts.FilmDTO) error {
-	newFilm := &film_internal.Film{
+	newFilm := &Film{
 		Title: filmDTO.Title,
-		Type:  film_internal.FilmType(filmDTO.Type),
+		Type:  FilmType(filmDTO.Type),
 	}
 
 	return a.filmRepo.Create(newFilm)
