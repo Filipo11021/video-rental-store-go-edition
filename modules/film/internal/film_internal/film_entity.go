@@ -14,16 +14,16 @@ type Film struct {
 	ID    int      `gorm:"primaryKey"`
 	Title string   `gorm:"column:name"`
 	Type  FilmType `gorm:"column:type"`
-}
+}	
 
 func (Film) TableName() string {
 	return "films"
 }
 
-func (a *Film) Dto() film_contracts.FilmDTO {
+func (f *Film) Dto() film_contracts.FilmDTO {
 	return film_contracts.FilmDTO{
-		ID:    a.ID,
-		Title: a.Title,
-		Type:  film_contracts.FilmTypeDto(a.Type),
+		ID:    f.ID,
+		Title: f.Title,
+		Type:  film_contracts.FilmTypeDto(f.Type),
 	}
 }

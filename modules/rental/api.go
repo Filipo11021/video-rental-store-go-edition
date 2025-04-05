@@ -18,11 +18,11 @@ type Api interface {
 
 type api struct {
 	rentalRepo      rentalRepo
-	priceCalculator PriceCalculator
+	priceCalculator priceCalculator
 	filmApi         film.Api
 }
 
-func newApi(rentalRepo rentalRepo, priceCalculator PriceCalculator, filmApi film.Api) Api {
+func newApi(rentalRepo rentalRepo, priceCalculator priceCalculator, filmApi film.Api) Api {
 
 	return &api{
 		rentalRepo:      rentalRepo,
@@ -35,7 +35,7 @@ func (a *api) CreateRental(dto CreateRentalDTO) error {
 	startDate := time.Now()
 	endDate := startDate.AddDate(0, 0, dto.Days)
 
-	rental := &Rental{
+	rental := &rental{
 		FilmID:    dto.FilmID,
 		StartDate: startDate,
 		EndDate:   endDate,

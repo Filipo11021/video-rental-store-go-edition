@@ -5,19 +5,19 @@ import (
 )
 
 type memoryUserRepo struct {
-	users  map[string]*User
+	users  map[string]*user
 	mu     sync.RWMutex
 	nextID int
 }
 
 func newMemoryUserRepo() userRepo {
 	return &memoryUserRepo{
-		users:  make(map[string]*User),
+		users:  make(map[string]*user),
 		nextID: 1,
 	}
 }
 
-func (r *memoryUserRepo) findById(id string) (*User, error) {
+func (r *memoryUserRepo) findById(id string) (*user, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 

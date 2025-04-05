@@ -8,7 +8,7 @@ import (
 )
 
 type userRepo interface {
-	findById(id string) (*User, error)
+	findById(id string) (*user, error)
 	
 }
 
@@ -20,22 +20,22 @@ func newWorkosUserRepo(client *usermanagement.Client) userRepo {
 	return &workosUserRepo{client: client}
 }
 
-func (r *workosUserRepo) findById(id string) (*User, error) {
-	user, err := r.client.GetUser(context.Background(), usermanagement.GetUserOpts{
+func (r *workosUserRepo) findById(id string) (*user, error) {
+	userData, err := r.client.GetUser(context.Background(), usermanagement.GetUserOpts{
 		User: id,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	createdAt, err := time.Parse(time.RFC3339, user.CreatedAt)
+	createdAt, err := time.Parse(time.RFC3339, userData.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
 
-	return &User{
-		ID:        user.ID,
-		Email:     user.Email,
+	return &user{
+		ID:        userData.ID,
+		Email:     userData.Email,
 		CreatedAt: createdAt,
 	}, nil
 }

@@ -10,18 +10,18 @@ const (
 	OldBasePrice        = 30.0
 )
 
-type PriceCalculator interface {
+type priceCalculator interface {
 	calculatePrice(filmType film_contracts.FilmTypeDto, days int) float64
 	calculateLateCharge(filmType film_contracts.FilmTypeDto, extraDays int) float64
 }
 
-type priceCalculator struct{}
+type priceCalculatorImpl struct{}
 
-func newPriceCalculator() PriceCalculator {
-	return &priceCalculator{}
+func newPriceCalculator() priceCalculator {
+	return &priceCalculatorImpl{}
 }
 
-func (pc *priceCalculator) calculatePrice(filmType film_contracts.FilmTypeDto, days int) float64 {
+func (pc *priceCalculatorImpl) calculatePrice(filmType film_contracts.FilmTypeDto, days int) float64 {
 	switch filmType {
 	case film_contracts.NewRelease:
 		return NewReleaseBasePrice * float64(days)
@@ -40,6 +40,8 @@ func (pc *priceCalculator) calculatePrice(filmType film_contracts.FilmTypeDto, d
 	}
 }
 
-func (pc *priceCalculator) calculateLateCharge(filmType film_contracts.FilmTypeDto, extraDays int) float64 {
+func (pc *priceCalculatorImpl) calculateLateCharge(filmType film_contracts.FilmTypeDto, extraDays int) float64 {
 	return pc.calculatePrice(filmType, extraDays)
 }
+
+var _ priceCalculator = &priceCalculatorImpl{}

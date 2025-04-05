@@ -6,18 +6,18 @@ import (
 
 type memoryRentalRepo struct {
 	mutex   sync.RWMutex
-	rentals map[int]*Rental
+	rentals map[int]*rental
 	nextID  int
 }
 
 func newMemoryRentalRepo() rentalRepo {
 	return &memoryRentalRepo{
-		rentals: make(map[int]*Rental),
+		rentals: make(map[int]*rental),
 		nextID:  1,
 	}
 }
 
-func (r *memoryRentalRepo) create(rental *Rental) error {
+func (r *memoryRentalRepo) create(rental *rental) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
@@ -27,18 +27,18 @@ func (r *memoryRentalRepo) create(rental *Rental) error {
 	return nil
 }
 
-func (r *memoryRentalRepo) findAll() ([]*Rental, error) {
+func (r *memoryRentalRepo) findAll() ([]*rental, error) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	rentals := make([]*Rental, 0, len(r.rentals))
+	rentals := make([]*rental, 0, len(r.rentals))
 	for _, rental := range r.rentals {
 		rentals = append(rentals, rental)
 	}
 	return rentals, nil
 }
 
-func (r *memoryRentalRepo) findById(id int) (*Rental, error) {
+func (r *memoryRentalRepo) findById(id int) (*rental, error) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
@@ -49,11 +49,11 @@ func (r *memoryRentalRepo) findById(id int) (*Rental, error) {
 	return rental, nil
 }
 
-func (r *memoryRentalRepo) findByFilmId(filmId int) ([]*Rental, error) {
+func (r *memoryRentalRepo) findByFilmId(filmId int) ([]*rental, error) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	var rentals []*Rental
+	var rentals []*rental
 	for _, rental := range r.rentals {
 		if rental.FilmID == filmId {
 			rentals = append(rentals, rental)
@@ -62,7 +62,7 @@ func (r *memoryRentalRepo) findByFilmId(filmId int) ([]*Rental, error) {
 	return rentals, nil
 }
 
-func (r *memoryRentalRepo) update(rental *Rental) error {
+func (r *memoryRentalRepo) update(rental *rental) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
