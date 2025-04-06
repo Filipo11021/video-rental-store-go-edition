@@ -1,4 +1,4 @@
-package film_internal
+package film_domain
 
 import "sync"
 
@@ -9,7 +9,7 @@ type memoryFilmRepo struct {
 }
 
 func NewMemoryFilmRepo() FilmRepo {
-	return &memoryFilmRepo{	
+	return &memoryFilmRepo{
 		films:  make(map[int]*Film),
 		nextID: 1,
 	}

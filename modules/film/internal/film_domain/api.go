@@ -1,4 +1,4 @@
-package film_internal
+package film_domain
 
 import (
 	"app/modules/film/film_contracts"

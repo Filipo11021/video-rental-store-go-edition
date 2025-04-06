@@ -1,4 +1,4 @@
-package film_internal
+package film_domain
 
 import "app/modules/film/film_contracts"
 
@@ -14,7 +14,7 @@ type Film struct {
 	ID    int      `gorm:"primaryKey"`
 	Title string   `gorm:"column:name"`
 	Type  FilmType `gorm:"column:type"`
-}	
+}
 
 func (Film) TableName() string {
 	return "films"

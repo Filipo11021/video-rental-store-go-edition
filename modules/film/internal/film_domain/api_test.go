@@ -1,7 +1,7 @@
-package film_internal
+package film_domain
 
 import (
-	"app/modules/film/film_contracts"	
+	"app/modules/film/film_contracts"
 	"testing"
 
 	"go.uber.org/fx"

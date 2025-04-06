@@ -1,4 +1,4 @@
-package film_internal
+package film_domain
 
 import (
 	"gorm.io/gorm"
