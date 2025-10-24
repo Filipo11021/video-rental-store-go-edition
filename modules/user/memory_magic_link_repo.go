@@ -44,24 +44,27 @@ func (r *memoryMagicLinkRepo) sendMagicLink(email string) error {
 	return nil
 }
 
-func (r *memoryMagicLinkRepo) verifyMagicLink(params VerifyMagicLinkParamsDTO) error {
+func (r *memoryMagicLinkRepo) verifyMagicLink(params VerifyMagicLinkParamsDto) (AuthTokensDto, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
 	data, exists := r.magicLinks[params.Email]
 	if !exists {
-		return errors.New("magic link not found")
+		return AuthTokensDto{}, errors.New("magic link not found")
 	}
 
 	if data.code != params.Code {
-		return errors.New("invalid code")
+		return AuthTokensDto{}, errors.New("invalid code")
 	}
 
 	if time.Now().After(data.expiresAt) {
-		return errors.New("magic link expired")
+		return AuthTokensDto{}, errors.New("magic link expired")
 	}
 
 	r.verifications[params.Email] = true
 
-	return nil
+	return AuthTokensDto{
+		AccessToken:  "access_token",
+		RefreshToken: "refresh_token",
+	}, nil
 }

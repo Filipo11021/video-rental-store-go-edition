@@ -1,8 +1,8 @@
 package film_contracts
 
 type FilmDTO struct {
-	ID    int      `json:"id"`
-	Title string   `json:"title"`
+	ID    int         `json:"id"`
+	Title string      `json:"title"`
 	Type  FilmTypeDto `json:"type"`
 }
 

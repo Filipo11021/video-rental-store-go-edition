@@ -8,25 +8,23 @@ import (
 )
 
 type magicLinkRepo interface {
-	sendMagicLink(email string) (error)
-	verifyMagicLink(dto VerifyMagicLinkParamsDTO) (error)
+	sendMagicLink(email string) error
+	verifyMagicLink(params VerifyMagicLinkParamsDto) (AuthTokensDto, error)
 }
-
 
 type workosMagicLinkRepo struct {
 	clientId string
-	client *usermanagement.Client
+	client   *usermanagement.Client
 }
-
 
 func newWorkOSMagicLinkRepo(client *usermanagement.Client, clientId string) magicLinkRepo {
 	return &workosMagicLinkRepo{
 		clientId: clientId,
-		client: client,
+		client:   client,
 	}
 }
 
-func (r *workosMagicLinkRepo) sendMagicLink(email string) (error) {
+func (r *workosMagicLinkRepo) sendMagicLink(email string) error {
 	_, err := r.client.CreateMagicAuth(
 		context.Background(),
 		usermanagement.CreateMagicAuthOpts{
@@ -40,8 +38,8 @@ func (r *workosMagicLinkRepo) sendMagicLink(email string) (error) {
 	return nil
 }
 
-func (r *workosMagicLinkRepo) verifyMagicLink(params VerifyMagicLinkParamsDTO) (error) {
-	_, err := r.client.AuthenticateWithMagicAuth(
+func (r *workosMagicLinkRepo) verifyMagicLink(params VerifyMagicLinkParamsDto) (AuthTokensDto, error) {
+	result, err := r.client.AuthenticateWithMagicAuth(
 		context.Background(),
 		usermanagement.AuthenticateWithMagicAuthOpts{
 			ClientID: r.clientId,
@@ -50,9 +48,11 @@ func (r *workosMagicLinkRepo) verifyMagicLink(params VerifyMagicLinkParamsDTO) (
 		},
 	)
 	if err != nil {
-		return fmt.Errorf("failed to get magic auth: %w", err)
+		return AuthTokensDto{}, fmt.Errorf("failed to get magic auth: %w", err)
 	}
 
-	return nil
+	return AuthTokensDto{
+		AccessToken:  result.AccessToken,
+		RefreshToken: result.AccessToken,
+	}, nil
 }
-

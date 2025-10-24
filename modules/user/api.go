@@ -1,8 +1,10 @@
 package user
 
+import "errors"
+
 type Api interface {
 	SendMagicLink(email string) error
-	VerifyMagicLink(dto VerifyMagicLinkParamsDTO) error
+	VerifyMagicLink(dto VerifyMagicLinkParamsDto) (AuthTokensDto, error)
 	GetUserById(id string) (*UserDTO, error)
 }
 
@@ -26,9 +28,15 @@ func (a *api) SendMagicLink(email string) error {
 	return err
 }
 
-func (a *api) VerifyMagicLink(dto VerifyMagicLinkParamsDTO) error {
-	err := a.magicLinkRepo.verifyMagicLink(dto)
-	return err
+func (a *api) VerifyMagicLink(dto VerifyMagicLinkParamsDto) (AuthTokensDto, error) {
+	result, err := a.magicLinkRepo.verifyMagicLink(VerifyMagicLinkParamsDto{
+		Email: dto.Email,
+		Code:  dto.Code,
+	})
+	if err != nil {
+		return AuthTokensDto{}, err
+	}
+	return result, nil
 }
 
 func (a *api) GetUserById(id string) (*UserDTO, error) {
@@ -37,7 +45,7 @@ func (a *api) GetUserById(id string) (*UserDTO, error) {
 		return nil, err
 	}
 	if user == nil {
-		return nil, nil
+		return nil, errors.New("user not found")
 	}
 	userDTO := user.dto()
 	return &userDTO, nil
