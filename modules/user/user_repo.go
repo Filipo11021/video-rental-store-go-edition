@@ -9,7 +9,6 @@ import (
 
 type userRepo interface {
 	findById(id string) (*user, error)
-	
 }
 
 type workosUserRepo struct {

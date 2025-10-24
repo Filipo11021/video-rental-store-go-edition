@@ -10,7 +10,7 @@ type user struct {
 
 func (u *user) dto() UserDTO {
 	return UserDTO{
-		ID:        u.ID,
-		Email:     u.Email,
+		ID:    u.ID,
+		Email: u.Email,
 	}
 }
